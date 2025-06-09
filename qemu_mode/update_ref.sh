@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 ##################################################
 # AFL++ internal tool to update qemuafl ref.
