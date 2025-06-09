@@ -124,7 +124,7 @@ shift $((OPTIND-1))
 
 TARGET_BIN="$1"
 
-if [ "$TARGET_BIN" = "" -o "$IN_DIR" = "" -o "$OUT_DIR" = "" ]; then
+if [ "$TARGET_BIN" = "" ] || [ "$IN_DIR" = "" ] || [ "$OUT_DIR" = "" ]; then
 
   cat 1>&2 <<_EOF_
 Usage: $0 [ options ] -- /path/to/target_app [ ... ]
@@ -185,7 +185,7 @@ if [ "$AFL_ALLOW_TMP" = "" ]; then
   echo "$PWD" | grep -qE '^(/var)?/tmp/'
   T5="$?"
 
-  if [ "$T1" = "0" -o "$T2" = "0" -o "$T3" = "0" -o "$T4" = "0" -o "$T5" = "0" ]; then
+  if [ "$T1" = "0" ] || [ "$T2" = "0" ] || [ "$T3" = "0" ] || [ "$T4" = "0" ] || [ "$T5" = "0" ]; then
     echo "[-] Warning: do not use this script in /tmp or /var/tmp for security reasons." 1>&2
   fi
 
@@ -206,7 +206,7 @@ fi
 
 # Check for obvious errors.
 
-if [ ! "$T_ARG" = "" -a -n "$F_ARG" -a ! "$NYX_MODE" == 1 ]; then
+if [ ! "$T_ARG" = "" ] && [ -n "$F_ARG" ] && [ ! "$NYX_MODE" == 1 ]; then
   echo "[-] Error: -T and -f can not be used together." 1>&2
   exit 1
 fi
@@ -230,11 +230,11 @@ if [ ! "$TIMEOUT" = "none" ]; then
 fi
 
 if [ "$NYX_MODE" = "" ]; then
-  if [ ! -f "$TARGET_BIN" -o ! -x "$TARGET_BIN" ]; then
+  if [ ! -f "$TARGET_BIN" ] || [ ! -x "$TARGET_BIN" ]; then
 
     TNEW="$(which "$TARGET_BIN" 2>/dev/null)"
 
-    if [ ! -f "$TNEW" -o ! -x "$TNEW" ]; then
+    if [ ! -f "$TNEW" ] || [ ! -x "$TNEW" ]; then
       echo "[-] Error: binary '$TARGET_BIN' not found or not executable." 1>&2
       exit 1
     fi
@@ -254,7 +254,7 @@ grep -aq AFL_DUMP_MAP_SIZE "$TARGET_BIN" && {
   }
 }
 
-if [ "$AFL_SKIP_BIN_CHECK" = "" -a "$QEMU_MODE" = "" -a "$FRIDA_MODE" = "" -a "$UNICORN_MODE" = "" -a "$NYX_MODE" = "" ]; then
+if [ "$AFL_SKIP_BIN_CHECK" = "" ] && [ "$QEMU_MODE" = "" ] && [ "$FRIDA_MODE" = "" ] && [ "$UNICORN_MODE" = "" ] && [ "$NYX_MODE" = "" ]; then
 
   if ! grep -qF "__AFL_SHM_ID" "$TARGET_BIN"; then
     echo "[-] Error: binary '$TARGET_BIN' doesn't appear to be instrumented." 1>&2
@@ -297,7 +297,7 @@ if [ -z "$SHOWMAP" ]; then
   fi
 fi
 
-if [ -z "$SHOWMAP" -a -x "./afl-showmap" ]; then
+if [ -z "$SHOWMAP" ] && [ -x "./afl-showmap" ]; then
   SHOWMAP="./afl-showmap"
 else
   if [ -n "$AFL_PATH" ]; then
@@ -316,7 +316,7 @@ if [ ! "$T_ARG" = "" ]; then
   if [ "$T_ARG" = "all" ]; then
     THREADS=$(nproc)
   else
-    if [ "$T_ARG" -gt 1 -a "$T_ARG" -le "$(nproc)" ]; then
+    if [ "$T_ARG" -gt 1 ] && [ "$T_ARG" -le "$(nproc)" ]; then
       THREADS=$T_ARG
     else
       echo "[-] Error: -T parameter must between 2 and $(nproc) or \"all\"." 1>&2

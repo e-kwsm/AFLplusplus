@@ -17,7 +17,7 @@ target="$1"
 symbol="$2"
 base="$3"
 
-test -z "$target" -o -z "$symbol" -o '!' -x "$target" && {
+test -z "$target" || test -z "$symbol" || ! test -x "$target" && {
   echo "Syntax: $0 executable function [baseaddress]"
   echo
   echo Help script to calculate the function address of a binary QEMU will load it to.
@@ -39,7 +39,7 @@ test -z "$tmp_addr" && { echo Error: function $symbol not found 1>&2; exit 1; }
 test -z "$pie" && { echo 0x$tmp_addr; exit 0; }
 
 test -z "$base" && {
-  test "$bits" = 32 -o "$bits" = 64 || { echo "Error: could not identify arch (bits=$bits)" 1>&2 ; exit 1; }
+  test "$bits" = 32 || test "$bits" = 64 || { echo "Error: could not identify arch (bits=$bits)" 1>&2 ; exit 1; }
   test "$arch" = Intel80386 && base=0x40000000
   test "$arch" = x86-64 && base=0x4000000000
   test "$arch" = ARMaarch64 && base=0x5500000000

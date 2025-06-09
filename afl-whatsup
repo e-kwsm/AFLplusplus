@@ -18,7 +18,7 @@
 # instances of afl-fuzz.
 #
 
-test "$1" = "-h" -o "$1" = "-hh" && {
+test "$1" = "-h" || test "$1" = "-hh" && {
   echo "$0 status check tool for afl-fuzz by Michal Zalewski"
   echo
   echo "Usage: $0 [-s] [-d] afl_output_directory"
@@ -45,7 +45,7 @@ unset RESET
 
 if [ -z "$TERM" ]; then export TERM=vt220; fi
 
-while [ "$1" = "-d" -o "$1" = "-m"  -o "$1" = "-n"  -o "$1" = "-s" ]; do
+while [ "$1" = "-d" ] || [ "$1" = "-m" ] || [ "$1" = "-n" ] || [ "$1" = "-s" ]; do
   
   if [ "$1" = "-d" ]; then
     PROCESS_DEAD=1
@@ -69,7 +69,7 @@ done
 
 DIR="$1"
 
-if [ "$DIR" = "" -o "$DIR" = "-h" -o "$DIR" = "--help" ]; then
+if [ "$DIR" = "" ] || [ "$DIR" = "-h" ] || [ "$DIR" = "--help" ]; then
   
   echo "$0 status check tool for afl-fuzz by Michal Zalewski" 1>&2
   echo 1>&2
@@ -199,7 +199,7 @@ for j in $(find . -maxdepth 2 -iname fuzzer_setup | sort); do
     RUN_DAYS=$((RUN_UNIX / 60 / 60 / 24))
     RUN_HRS=$(((RUN_UNIX / 60 / 60) % 24))
     COVERAGE=$(echo $bitmap_cvg|tr -d %)
-    if [ -n "$TOTAL_COVERAGE" -a -n "$COVERAGE" -a -n "$BC" ]; then
+    if [ -n "$TOTAL_COVERAGE" ] && [ -n "$COVERAGE" ] && [ -n "$BC" ]; then
       if [ "$(echo "$TOTAL_COVERAGE < $COVERAGE" | bc)" -eq 1 ]; then
         TOTAL_COVERAGE=$COVERAGE
       fi
@@ -280,7 +280,7 @@ for j in $(find . -maxdepth 2 -iname fuzzer_setup | sort); do
     
     EXEC_SEC=0
     EXEC_MIN=0
-    test -z "$RUN_UNIX" -o "$RUN_UNIX" = 0 || EXEC_SEC=$((execs_done / RUN_UNIX))
+    test -z "$RUN_UNIX" || test "$RUN_UNIX" = 0 || EXEC_SEC=$((execs_done / RUN_UNIX))
     PATH_PERC=$((cur_item * 100 / corpus_count))
 
     test "$IS_DEAD" = 1 || EXEC_MIN=$(echo $execs_ps_last_min|sed 's/\..*//')
@@ -353,7 +353,7 @@ for j in $(find . -maxdepth 2 -iname fuzzer_setup | sort); do
 
   else
 
-    if [ ! -e "$i" -a -e "$j" ]; then
+    if [ ! -e "$i" ] && [ -e "$j" ]; then
 
       if [ "$PROCESS_DEAD" != "" ]; then
         ALIVE_CNT=$((ALIVE_CNT + 1))
@@ -405,7 +405,7 @@ fi
 
 echo "Summary stats"
 echo "============="
-if [ -z "$SUMMARY_ONLY" -o -z "$MINIMAL_ONLY" ]; then
+if [ -z "$SUMMARY_ONLY" ] || [ -z "$MINIMAL_ONLY" ]; then
   echo
 fi
 
@@ -434,7 +434,7 @@ if [ -z "$MINIMAL_ONLY" ]; then
   echo "        Pending items : $TOTAL_PFAV faves, $TOTAL_PENDING total"
 fi
 
-if [ "$ALIVE_CNT" -gt "1" -o -n "$MINIMAL_ONLY" ]; then
+if [ "$ALIVE_CNT" -gt "1" ] || [ -n "$MINIMAL_ONLY" ]; then
   if [ "$ALIVE_CNT" -gt "0" ]; then
     echo "   Pending per fuzzer : $((TOTAL_PFAV/ALIVE_CNT)) faves, $((TOTAL_PENDING/ALIVE_CNT)) total (on average)"
   fi

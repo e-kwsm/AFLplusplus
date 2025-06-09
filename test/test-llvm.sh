@@ -5,21 +5,21 @@
 OS=$(uname -s)
 
 $ECHO "$BLUE[*] Testing: llvm_mode, afl-showmap, afl-fuzz, afl-cmin and afl-tmin"
-test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
+test -e ../afl-clang-fast && test -e ../split-switches-pass.so && {
   ../afl-clang-fast -o test-instr.plain ../test-instr.c > /dev/null 2>&1
   AFL_HARDEN=1 ../afl-clang-fast -o test-compcov.harden test-compcov.c > /dev/null 2>&1
   test -e test-instr.plain && {
     $ECHO "$GREEN[+] llvm_mode compilation succeeded"
     echo 0 | AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.plain.0 -r -- ./test-instr.plain > /dev/null 2>&1
     AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.plain.1 -r -- ./test-instr.plain < /dev/null > /dev/null 2>&1
-    test -e test-instr.plain.0 -a -e test-instr.plain.1 && {
+    test -e test-instr.plain.0 && test -e test-instr.plain.1 && {
       diff test-instr.plain.0 test-instr.plain.1 > /dev/null 2>&1 && {
         $ECHO "$RED[!] llvm_mode instrumentation should be different on different input but is not"
         CODE=1
       } || {
         $ECHO "$GREEN[+] llvm_mode instrumentation present and working correctly"
         TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}')
-        test "$TUPLES" -gt 2 -a "$TUPLES" -lt 8 && {
+        test "$TUPLES" -gt 2 && test "$TUPLES" -lt 8 && {
           $ECHO "$GREEN[+] llvm_mode run reported $TUPLES instrumented locations which is fine"
         } || {
           $ECHO "$RED[!] llvm_mode instrumentation produces weird numbers: $TUPLES"
@@ -42,14 +42,14 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
     $ECHO "$GREEN[+] llvm_mode threadsafe compilation succeeded"
     echo 0 | AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.ts.0 -r -- ./test-instr.ts > /dev/null 2>&1
     AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.ts.1 -r -- ./test-instr.ts < /dev/null > /dev/null 2>&1
-    test -e test-instr.ts.0 -a -e test-instr.ts.1 && {
+    test -e test-instr.ts.0 && test -e test-instr.ts.1 && {
       diff test-instr.ts.0 test-instr.ts.1 > /dev/null 2>&1 && {
         $ECHO "$RED[!] llvm_mode threadsafe instrumentation should be different on different input but is not"
         CODE=1
       } || {
         $ECHO "$GREEN[+] llvm_mode threadsafe instrumentation present and working correctly"
         TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.ts 2>&1 | grep Captur | awk '{print$3}')
-        test "$TUPLES" -gt 2 -a "$TUPLES" -lt 8 && {
+        test "$TUPLES" -gt 2 && test "$TUPLES" -lt 8 && {
           $ECHO "$GREEN[+] llvm_mode run reported $TUPLES threadsafe instrumented locations which is fine"
         } || {
           $ECHO "$RED[!] llvm_mode threadsafe instrumentation produces weird numbers: $TUPLES"
@@ -81,14 +81,14 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
       fi
       echo 0 | AFL_PRELOAD=./test-instr.so TEST_DLOPEN_TARGET=./test-instr.so AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-dlopen.plain.0 -r -- ./test-dlopen.plain > /dev/null 2>&1
       AFL_PRELOAD=./test-instr.so TEST_DLOPEN_TARGET=./test-instr.so AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-dlopen.plain.1 -r -- ./test-dlopen.plain < /dev/null > /dev/null 2>&1
-      test -e test-dlopen.plain.0 -a -e test-dlopen.plain.1 && {
+      test -e test-dlopen.plain.0 && test -e test-dlopen.plain.1 && {
         diff test-dlopen.plain.0 test-dlopen.plain.1 > /dev/null 2>&1 && {
           $ECHO "$RED[!] llvm_mode test-dlopen instrumentation should be different on different input but is not"
           CODE=1
         } || {
           $ECHO "$GREEN[+] llvm_mode test-dlopen instrumentation present and working correctly"
           TUPLES=$(echo 0|AFL_PRELOAD=./test-instr.so TEST_DLOPEN_TARGET=./test-instr.so AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-dlopen.plain 2>&1 | grep Captur | awk '{print$3}')
-          test "$TUPLES" -gt 3 -a "$TUPLES" -lt 12 && {
+          test "$TUPLES" -gt 3 && test "$TUPLES" -lt 12 && {
             $ECHO "$GREEN[+] llvm_mode test-dlopen run reported $TUPLES instrumented locations which is fine"
           } || {
             $ECHO "$RED[!] llvm_mode test-dlopen instrumentation produces weird numbers: $TUPLES"
@@ -147,7 +147,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
         CODE=1
       }
     }
-    test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" || {
+    test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || {
       mkdir -p in2
       echo 000000000000000000000000 > in/in2
       echo 111 > in/in3

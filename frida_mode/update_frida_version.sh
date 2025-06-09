@@ -7,7 +7,7 @@ NEW=$(curl https://github.com/frida/frida/releases/ 2>/dev/null|grep 'Frida\ [0-
 echo Current set version: $OLD
 echo Newest available version: $NEW
 
-test -z "$OLD" -o -z "$NEW" -o "$OLD" = "$NEW" && { echo Nothing to be done. ; exit 0 ; }
+test -z "$OLD" || test -z "$NEW" || test "$OLD" = "$NEW" && { echo Nothing to be done. ; exit 0 ; }
 
 # Determine the correct sed command
 case $(sed --help 2>&1) in

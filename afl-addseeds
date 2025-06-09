@@ -1,6 +1,6 @@
 #!/bin/sh
 
-test -z "$1" -o "$1" = "-h" -o "$1" = "-hh" -o "$1" = "--help" && {
+test -z "$1" || test "$1" = "-h" || test "$1" = "-hh" || test "$1" = "--help" && {
   echo afl-addseeds by Marc Heuse
   echo
   echo Syntax: afl-addseeds -o afl-out-dir [-i seed_file_or_dir] seed_file_or_seed_dir seed_file_or_seed_dir ...
@@ -39,7 +39,7 @@ test -d "$OUTDIR" || { echo Error: could not create $OUTDIR ; exit 1 ; }
 echo Adding seeds ...
 NEXTID=0
 for i in $*; do
-  test -z "$i" -o "$i" = "$OUT" -o "$i" = "-i" -o "$i" = "-o" || {
+  test -z "$i" || test "$i" = "$OUT" || test "$i" = "-i" || test "$i" = "-o" || {
     find "$i" -type f | while read -r FILE; do
       N=xxx
       while [ -n "$N" ]; do

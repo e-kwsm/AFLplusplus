@@ -16,7 +16,7 @@ test -z "$AFL_CC" && {
 test -e ../afl-frida-trace.so && {
   cc -no-pie -o test-instr ../test-instr.c
   cc -o test-compcov test-compcov.c
-  test -e test-instr -a -e test-compcov && {
+  test -e test-instr && test -e test-compcov && {
     {
       mkdir -p in
       echo 00000 > in/in
@@ -36,7 +36,7 @@ test -e ../afl-frida-trace.so && {
       }
       rm -f errors
 
-      test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" -o "$SYS" = "aarch64" -o ! "${SYS%%arm*}" && {
+      test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || test "$SYS" = "aarch64" || test ! "${SYS%%arm*}" && {
         $ECHO "$GREY[*] running afl-fuzz for frida_mode cmplog, this will take approx 10 seconds"
         {
           ../afl-fuzz -m none -V07 -O -c 0 -l 3 -i in -o out -- ./test-compcov >>errors 2>&1
@@ -55,7 +55,7 @@ test -e ../afl-frida-trace.so && {
        $ECHO "$YELLOW[-] not an intel or arm platform, cannot test frida_mode cmplog"
       }
 
-      test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" -o "$SYS" = "aarch64" -o ! "${SYS%%arm*}" && {
+      test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || test "$SYS" = "aarch64" || test ! "${SYS%%arm*}" && {
         $ECHO "$GREY[*] running afl-fuzz for persistent frida_mode, this will take approx 10 seconds"
         {
           #if file test-instr | grep -q "32-bit"; then
@@ -74,7 +74,7 @@ test -e ../afl-frida-trace.so && {
         test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
           $ECHO "$GREEN[+] afl-fuzz is working correctly with persistent frida_mode"
           RUNTIMEP=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
-          test -n "$RUNTIME" -a -n "$RUNTIMEP" && {
+          test -n "$RUNTIME" && test -n "$RUNTIMEP" && {
             DIFF=$(expr $RUNTIMEP / $RUNTIME)
             test "$DIFF" -gt 1 && { # must be at least twice as fast
               $ECHO "$GREEN[+] persistent frida_mode was noticeable faster than standard frida_mode"

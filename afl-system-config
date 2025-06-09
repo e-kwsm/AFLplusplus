@@ -1,5 +1,5 @@
 #!/bin/sh
-test "$1" = "-h" -o "$1" = "-hh" -o "$1" = "--help" && {
+test "$1" = "-h" || test "$1" = "-hh" || test "$1" = "--help" && {
   echo 'afl-system-config by Marc Heuse <mh@mh-sec.de>'
   echo
   echo $0

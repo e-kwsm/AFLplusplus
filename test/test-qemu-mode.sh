@@ -23,7 +23,7 @@ test -e ../afl-qemu-trace && {
   ${CPU_TARGET_CC} -pie -fPIE -o test-instr ../test-instr.c
   ${CPU_TARGET_CC} -o test-compcov test-compcov.c
   ${CPU_TARGET_CC} -pie -fPIE -o test-instr-exit-at-end -DEXIT_AT_END ../test-instr.c
-  test -e test-instr -a -e test-compcov -a -e test-instr-exit-at-end && {
+  test -e test-instr && test -e test-compcov && test -e test-instr-exit-at-end && {
     {
       mkdir -p in
       echo 00000 > in/in
@@ -64,7 +64,7 @@ test -e ../afl-qemu-trace && {
       }
       rm -f errors
 
-      test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" -o "$SYS" = "aarch64" -o ! "${SYS%%arm*}" && {
+      test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || test "$SYS" = "aarch64" || test ! "${SYS%%arm*}" && {
         test -e ../libcompcov.so && {
           $ECHO "$GREY[*] running afl-fuzz for qemu_mode compcov, this will take approx 10 seconds"
           {
@@ -92,7 +92,7 @@ test -e ../afl-qemu-trace && {
        $ECHO "$YELLOW[-] not an intel or arm platform, cannot test qemu_mode compcov"
       }
       
-      test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" -o "$SYS" = "aarch64" -o ! "${SYS%%arm*}" && {
+      test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || test "$SYS" = "aarch64" || test ! "${SYS%%arm*}" && {
         $ECHO "$GREY[*] running afl-fuzz for qemu_mode cmplog, this will take approx 10 seconds"
         {
           ../afl-fuzz -V07 -Q -c 0 -l 3 -i in -o out -- ./test-compcov >>errors 2>&1
@@ -111,7 +111,7 @@ test -e ../afl-qemu-trace && {
        $ECHO "$YELLOW[-] not an intel or arm platform, cannot test qemu_mode cmplog"
       }
 
-      test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" -o "$SYS" = "aarch64" -o ! "${SYS%%arm*}" -o "$SYS" = "mipsel" && {
+      test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || test "$SYS" = "aarch64" || test ! "${SYS%%arm*}" || test "$SYS" = "mipsel" && {
         $ECHO "$GREY[*] running afl-fuzz for persistent qemu_mode, this will take approx 10 seconds"
         {
           IS_STATIC=""
@@ -144,7 +144,7 @@ test -e ../afl-qemu-trace && {
         test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
           $ECHO "$GREEN[+] afl-fuzz is working correctly with persistent qemu_mode"
           RUNTIMEP=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
-          test -n "$RUNTIME" -a -n "$RUNTIMEP" && {
+          test -n "$RUNTIME" && test -n "$RUNTIMEP" && {
             DIFF=$(expr $RUNTIMEP / $RUNTIME)
             test "$DIFF" -gt 1 && { # must be at least twice as fast
               $ECHO "$GREEN[+] persistent qemu_mode was noticeable faster than standard qemu_mode"
@@ -166,7 +166,7 @@ test -e ../afl-qemu-trace && {
        $ECHO "$YELLOW[-] not an intel or arm platform, cannot test persistent qemu_mode"
       }
 
-      test "$SYS" = "i686" -o "$SYS" = "x86_64" -o "$SYS" = "amd64" -o "$SYS" = "i86pc" -o "$SYS" = "aarch64" -o ! "${SYS%%arm*}" -o "$SYS" = "mipsel" && {
+      test "$SYS" = "i686" || test "$SYS" = "x86_64" || test "$SYS" = "amd64" || test "$SYS" = "i86pc" || test "$SYS" = "aarch64" || test ! "${SYS%%arm*}" || test "$SYS" = "mipsel" && {
         $ECHO "$GREY[*] running afl-fuzz for persistent qemu_mode with AFL_QEMU_PERSISTENT_EXITS, this will take approx 10 seconds"
         {
           IS_STATIC=""
@@ -201,7 +201,7 @@ test -e ../afl-qemu-trace && {
         test -n "$( ls out/default/queue/id:000000* 2>/dev/null )" && {
           $ECHO "$GREEN[+] afl-fuzz is working correctly with persistent qemu_mode and AFL_QEMU_PERSISTENT_EXITS"
           RUNTIMEP_EXIT=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
-          test -n "$RUNTIME" -a -n "$RUNTIMEP_EXIT" && {
+          test -n "$RUNTIME" && test -n "$RUNTIMEP_EXIT" && {
             DIFF=$(expr $RUNTIMEP_EXIT / $RUNTIME)
             test "$DIFF" -gt 1 && { # must be at least twice as fast
               $ECHO "$GREEN[+] persistent qemu_mode with AFL_QEMU_PERSISTENT_EXITS was noticeable faster than standard qemu_mode"
@@ -229,7 +229,7 @@ test -e ../afl-qemu-trace && {
           RETVAL_NORMAL32=$?
 	  LD_PRELOAD=../qemu_mode/unsigaction/unsigaction32.so ./test-unsigaction32
           RETVAL_LIBUNSIGACTION32=$?
-	  test $RETVAL_NORMAL32 = "2" -a $RETVAL_LIBUNSIGACTION32 = "0" && {
+	  test $RETVAL_NORMAL32 = "2" && test $RETVAL_LIBUNSIGACTION32 = "0" && {
             $ECHO "$GREEN[+] qemu_mode unsigaction library (32 bit) ignores signals"
 	  } || {
 	    test $RETVAL_NORMAL32 != "2" && {
@@ -254,7 +254,7 @@ test -e ../afl-qemu-trace && {
           RETVAL_NORMAL64=$?
 	  LD_PRELOAD=../qemu_mode/unsigaction/unsigaction64.so ./test-unsigaction64
           RETVAL_LIBUNSIGACTION64=$?
-	  test $RETVAL_NORMAL64 = "2" -a $RETVAL_LIBUNSIGACTION64 = "0" && {
+	  test $RETVAL_NORMAL64 = "2" && test $RETVAL_LIBUNSIGACTION64 = "0" && {
             $ECHO "$GREEN[+] qemu_mode unsigaction library (64 bit) ignores signals"
 	  } || {
 	    test $RETVAL_NORMAL64 != "2" && {
