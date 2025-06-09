@@ -42,7 +42,7 @@ while getopts "+u:m:" opt; do
          ;;
 
     "m")
-         MEM_LIMIT="$[OPTARG]"
+         MEM_LIMIT="$((OPTARG))"
          ;;
 
     "?")
