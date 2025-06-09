@@ -38,7 +38,7 @@ echo
 
 echo "[*] Performing basic sanity checks..."
 
-if [ ! "`uname -s`" = "Linux" ]; then
+if [ ! "$(uname -s)" = "Linux" ]; then
 
   echo "[-] Error: QEMU instrumentation is supported only on Linux."
   exit 0
@@ -82,7 +82,7 @@ else
     while [ '!' -d qemuafl/.git -a "$CNT" -lt 4 ]; do
       echo "Trying to clone qemuafl (attempt $CNT/3)"
       git clone --depth 1 https://github.com/AFLplusplus/qemuafl
-      CNT=`expr "$CNT" + 1`
+      CNT=$(expr "$CNT" + 1)
     done
   }
 fi
@@ -118,7 +118,7 @@ echo "[*] Configuring QEMU for $CPU_TARGET..."
 ORIG_CPU_TARGET="$CPU_TARGET"
 
 if [ "$ORIG_CPU_TARGET" = "" ]; then
-  CPU_TARGET="`uname -m`"
+  CPU_TARGET="$(uname -m)"
   test "$CPU_TARGET" = "i686" && CPU_TARGET="i386"
   test "$CPU_TARGET" = "arm64v8" && CPU_TARGET="aarch64"
   case "$CPU_TARGET" in 
@@ -349,7 +349,7 @@ if [ "$ORIG_CROSS" = "" ]; then
     then # works on Arch Linux
       CROSS=i686-pc-linux-gnu-gcc
     fi
-    if ! command -v "$CROSS" > /dev/null && [ "`uname -m`" = "x86_64" ]
+    if ! command -v "$CROSS" > /dev/null && [ "$(uname -m)" = "x86_64" ]
     then # set -m32
       test "$CC" = "" && CC="gcc"
       CROSS="$CC"

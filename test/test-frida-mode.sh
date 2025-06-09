@@ -26,7 +26,7 @@ test -e ../afl-frida-trace.so && {
       } >>errors 2>&1
       test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
         $ECHO "$GREEN[+] afl-fuzz is working correctly with frida_mode"
-        RUNTIME=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+        RUNTIME=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
       } || {
         echo CUT------------------------------------------------------------------CUT
         cat errors
@@ -61,7 +61,7 @@ test -e ../afl-frida-trace.so && {
           #if file test-instr | grep -q "32-bit"; then
           #else
           #fi
-          export AFL_FRIDA_PERSISTENT_ADDR=0x`nm test-instr | grep -Ei "T _main|T main" | awk '{print $1}'`
+          export AFL_FRIDA_PERSISTENT_ADDR=0x$(nm test-instr | grep -Ei "T _main|T main" | awk '{print $1}')
           $ECHO "Note: AFL_FRIDA_PERSISTENT_ADDR=$AFL_FRIDA_PERSISTENT_ADDR <= $(nm test-instr | grep "T main" | awk '{print $1}')"
           env|grep AFL_|sort
           file test-instr
@@ -73,9 +73,9 @@ test -e ../afl-frida-trace.so && {
         } >>errors 2>&1
         test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
           $ECHO "$GREEN[+] afl-fuzz is working correctly with persistent frida_mode"
-          RUNTIMEP=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+          RUNTIMEP=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
           test -n "$RUNTIME" -a -n "$RUNTIMEP" && {
-            DIFF=`expr $RUNTIMEP / $RUNTIME`
+            DIFF=$(expr $RUNTIMEP / $RUNTIME)
             test "$DIFF" -gt 1 && { # must be at least twice as fast
               $ECHO "$GREEN[+] persistent frida_mode was noticeable faster than standard frida_mode"
             } || {

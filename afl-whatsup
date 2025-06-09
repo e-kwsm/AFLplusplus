@@ -99,27 +99,27 @@ if [ -d queue ]; then
   
 fi
 
-BC=`which bc 2>/dev/null`
-FUSER=`which fuser 2>/dev/null`
+BC=$(which bc 2>/dev/null)
+FUSER=$(which fuser 2>/dev/null)
 
 if [ -z "$NO_COLOR" ]; then
-  RED=`tput setaf 9 1 1 2>/dev/null`
-  GREEN=`tput setaf 2 1 1 2>/dev/null`
-  BLUE=`tput setaf 4 1 1 2>/dev/null`
-  YELLOW=`tput setaf 11 1 1 2>/dev/null`
-  NC=`tput sgr0`
+  RED=$(tput setaf 9 1 1 2>/dev/null)
+  GREEN=$(tput setaf 2 1 1 2>/dev/null)
+  BLUE=$(tput setaf 4 1 1 2>/dev/null)
+  YELLOW=$(tput setaf 11 1 1 2>/dev/null)
+  NC=$(tput sgr0)
   RESET="$NC"
 fi
 
-PLATFORM=`uname -s`
+PLATFORM=$(uname -s)
 #if [ "$PLATFORM" = "Linux" ] ; then
-#  CUR_TIME=`cat /proc/uptime | awk '{printf "%.0f\n", $1}'`
+#  CUR_TIME=$(cat /proc/uptime | awk '{printf "%.0f\n", $1}')
 #else
   # This will lead to inaccurate results but will prevent the script from breaking on platforms other than Linux
-  CUR_TIME=`date +%s`
+  CUR_TIME=$(date +%s)
 #fi
 
-TMP=`mktemp -t .afl-whatsup-XXXXXXXX` || TMP=`mktemp -p /data/local/tmp .afl-whatsup-XXXXXXXX` || TMP=`mktemp -p /data/local/tmp .afl-whatsup-XXXXXXXX` || exit 1
+TMP=$(mktemp -t .afl-whatsup-XXXXXXXX) || TMP=$(mktemp -p /data/local/tmp .afl-whatsup-XXXXXXXX) || TMP=$(mktemp -p /data/local/tmp .afl-whatsup-XXXXXXXX) || exit 1
 trap "rm -f $TMP" 1 2 3 13 15
 
 ALIVE_CNT=0
@@ -182,7 +182,7 @@ FIRST=true
 TOTAL_WCOP=
 TOTAL_LAST_FIND=0
 
-for j in `find . -maxdepth 2 -iname fuzzer_setup | sort`; do
+for j in $(find . -maxdepth 2 -iname fuzzer_setup | sort); do
   
   DIR=$(dirname "$j")
   i=$DIR/fuzzer_stats
@@ -226,7 +226,7 @@ for j in `find . -maxdepth 2 -iname fuzzer_setup | sort`; do
         if [ "$i" -ot "$j" ]; then
           
           # fuzzer_setup is newer than fuzzer_stats, maybe the instance is starting?
-          TMP_PID=`fuser -v "$DIRECTORY" 2>&1 | grep afl-fuzz`
+          TMP_PID=$(fuser -v "$DIRECTORY" 2>&1 | grep afl-fuzz)
           
           if [ -n "$TMP_PID" ]; then
             

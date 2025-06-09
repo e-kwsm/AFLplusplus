@@ -18,7 +18,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
         CODE=1
       } || {
         $ECHO "$GREEN[+] llvm_mode instrumentation present and working correctly"
-        TUPLES=`echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}'`
+        TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}')
         test "$TUPLES" -gt 2 -a "$TUPLES" -lt 8 && {
           $ECHO "$GREEN[+] llvm_mode run reported $TUPLES instrumented locations which is fine"
         } || {
@@ -48,7 +48,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
         CODE=1
       } || {
         $ECHO "$GREEN[+] llvm_mode threadsafe instrumentation present and working correctly"
-        TUPLES=`echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.ts 2>&1 | grep Captur | awk '{print$3}'`
+        TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.ts 2>&1 | grep Captur | awk '{print$3}')
         test "$TUPLES" -gt 2 -a "$TUPLES" -lt 8 && {
           $ECHO "$GREEN[+] llvm_mode run reported $TUPLES threadsafe instrumented locations which is fine"
         } || {
@@ -70,7 +70,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
   ../afl-clang-fast -DTEST_SHARED_OBJECT=1 -z defs -fPIC -shared -o test-instr.so ../test-instr.c > /dev/null 2>&1
   test -e test-instr.so && {
     $ECHO "$GREEN[+] llvm_mode shared object with -z defs compilation succeeded"
-    test `uname -s` = 'Linux' && LIBS=-ldl
+    test $(uname -s) = 'Linux' && LIBS=-ldl
     ../afl-clang-fast -o test-dlopen.plain test-dlopen.c ${LIBS} > /dev/null 2>&1
     test -e test-dlopen.plain && {
       $ECHO "$GREEN[+] llvm_mode test-dlopen compilation succeeded"
@@ -87,7 +87,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
           CODE=1
         } || {
           $ECHO "$GREEN[+] llvm_mode test-dlopen instrumentation present and working correctly"
-          TUPLES=`echo 0|AFL_PRELOAD=./test-instr.so TEST_DLOPEN_TARGET=./test-instr.so AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-dlopen.plain 2>&1 | grep Captur | awk '{print$3}'`
+          TUPLES=$(echo 0|AFL_PRELOAD=./test-instr.so TEST_DLOPEN_TARGET=./test-instr.so AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-dlopen.plain 2>&1 | grep Captur | awk '{print$3}')
           test "$TUPLES" -gt 3 -a "$TUPLES" -lt 12 && {
             $ECHO "$GREEN[+] llvm_mode test-dlopen run reported $TUPLES instrumented locations which is fine"
           } || {
@@ -155,7 +155,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
         $ECHO "$GREY[*] afl-cmin not available on macOS, cannot test afl-cmin"
       } || {
         ../afl-cmin -m ${MEM_LIMIT} -i in -o in2 -- ./test-instr.plain >/dev/null 2>&1 # why is afl-forkserver writing to stderr?
-        CNT=`ls in2/* 2>/dev/null | wc -l`
+        CNT=$(ls in2/* 2>/dev/null | wc -l)
         case "$CNT" in
           *2) $ECHO "$GREEN[+] afl-cmin correctly minimized the number of testcases" ;;
           *)  $ECHO "$RED[!] afl-cmin did not correctly minimize the number of testcases ($CNT)"
@@ -167,7 +167,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
       export AFL_QUIET=1
       if type bash >/dev/null ; then {
         ../afl-cmin.bash -m ${MEM_LIMIT} -i in -o in2 -- ./test-instr.plain >/dev/null
-        CNT=`ls in2/* 2>/dev/null | wc -l`
+        CNT=$(ls in2/* 2>/dev/null | wc -l)
         case "$CNT" in
           *2) $ECHO "$GREEN[+] afl-cmin.bash correctly minimized the number of testcases" ;;
           *)  $ECHO "$RED[!] afl-cmin.bash did not correctly minimize the number of testcases ($CNT)"
@@ -180,7 +180,7 @@ test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
       }
       fi
       ../afl-tmin -m ${MEM_LIMIT} -i in/in2 -o in2/in2 -- ./test-instr.plain > /dev/null 2>&1
-      SIZE=`ls -l in2/in2 2>/dev/null | awk '{print$5}'`
+      SIZE=$(ls -l in2/in2 2>/dev/null | awk '{print$5}')
       test "$SIZE" = 1 && $ECHO "$GREEN[+] afl-tmin correctly minimized the testcase"
       test "$SIZE" = 1 || {
          $ECHO "$RED[!] afl-tmin did incorrectly minimize the testcase to $SIZE"

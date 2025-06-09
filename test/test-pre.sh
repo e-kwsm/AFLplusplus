@@ -14,7 +14,7 @@ if [ $AFL_TEST_DEPTH = 1 ]; then
 # Ensure we have: test, type, diff, grep -qE
 #
 test -z "" 2>/dev/null || { echo Error: test command not found ; exit 1 ; }
-GREP=`type grep > /dev/null 2>&1 && echo OK`
+GREP=$(type grep > /dev/null 2>&1 && echo OK)
 test "$GREP" = OK || { echo Error: grep command not found ; exit 1 ; }
 echo foobar | grep -qE 'asd|oob' 2>/dev/null || { echo Error: grep command does not support -q and/or -E option ; exit 1 ; }
 test -e ./test-all.sh || cd $(dirname "$0") || exit 1

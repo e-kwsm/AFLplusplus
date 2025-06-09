@@ -5,7 +5,7 @@
 $ECHO "$BLUE[*] Testing: gcc_plugin"
 test -e ../afl-gcc-fast -a -e ../afl-compiler-rt.o && {
   SAVE_AFL_CC=${AFL_CC}
-  export AFL_CC=`command -v gcc`
+  export AFL_CC=$(command -v gcc)
   ../afl-gcc-fast -o test-instr.plain.gccpi ../test-instr.c > /dev/null 2>&1
   AFL_HARDEN=1 ../afl-gcc-fast -o test-compcov.harden.gccpi test-compcov.c > /dev/null 2>&1
   test -e test-instr.plain.gccpi && {
@@ -18,7 +18,7 @@ test -e ../afl-gcc-fast -a -e ../afl-compiler-rt.o && {
         CODE=1
       } || {
         $ECHO "$GREEN[+] gcc_plugin instrumentation present and working correctly"
-        TUPLES=`echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain.gccpi 2>&1 | grep Captur | awk '{print$3}'`
+        TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain.gccpi 2>&1 | grep Captur | awk '{print$3}')
         test "$TUPLES" -gt 1 -a "$TUPLES" -lt 10 && {
           $ECHO "$GREEN[+] gcc_plugin run reported $TUPLES instrumented locations which is fine"
         } || {

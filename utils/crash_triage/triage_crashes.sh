@@ -69,7 +69,7 @@ if [ ! -d "$DIR/queue" ]; then
   exit 1
 fi
 
-CCOUNT=$((`ls -- "$DIR/crashes" 2>/dev/null | wc -l`))
+CCOUNT=$(($(ls -- "$DIR/crashes" 2>/dev/null | wc -l)))
 
 if [ "$CCOUNT" = "0" ]; then
   echo "No crashes recorded in the target directory - nothing to be done."
@@ -80,8 +80,8 @@ echo
 
 for crash in $DIR/crashes/id:*; do
 
-  id=`basename -- "$crash" | cut -d, -f1 | cut -d: -f2`
-  sig=`basename -- "$crash" | cut -d, -f2 | cut -d: -f2`
+  id=$(basename -- "$crash" | cut -d, -f1 | cut -d: -f2)
+  sig=$(basename -- "$crash" | cut -d, -f2 | cut -d: -f2)
 
   # Grab the args, converting @@ to $crash
 
@@ -93,7 +93,7 @@ for crash in $DIR/crashes/id:*; do
     case "$a" in
       *@@*)
       unset use_stdio
-      use_args="$use_args `printf %s "$a" | sed -e 's<@@<'$crash'<g'`"
+      use_args="$use_args $(printf %s "$a" | sed -e 's<@@<'$crash'<g')"
       ;;
       *)
       use_args="$use_args $a"

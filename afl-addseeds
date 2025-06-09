@@ -14,11 +14,11 @@ test -z "$1" -o "$1" = "-h" -o "$1" = "-hh" -o "$1" = "--help" && {
 }
 
 for TOOL in find ls; do
-  X=`which $TOOL`
+  X=$(which $TOOL)
   test -n "$X" || { echo "Error: required tool '$TOOL' not found."; exit 1; }
 done
 
-TEST=`printf %06d 123 2>/dev/null`
+TEST=$(printf %06d 123 2>/dev/null)
 test "$TEST" = "000123" || { echo "Error: required tool 'printf' not found."; exit 1; }
 
 OUT=
@@ -29,7 +29,7 @@ for i in $*; do
 done
 
 test -d "$OUT" || { echo Error: $OUT is not an existing directory; exit 1; }
-OK=`ls $OUT/*/fuzzer_stats 2>/dev/null`
+OK=$(ls $OUT/*/fuzzer_stats 2>/dev/null)
 test -n "$OK" || { echo "Error: $OUT is not an 'afl-fuzz -o ... ' output directory" ; exit 1; }
 
 OUTDIR=$OUT/addseeds/queue
@@ -44,10 +44,10 @@ for i in $*; do
       N=xxx
       while [ -n "$N" ]; do
         ID=$NEXTID
-        N=`ls "$OUTDIR/id:$(printf %06d $ID),"* 2>/dev/null`
+        N=$(ls "$OUTDIR/id:$(printf %06d $ID),"* 2>/dev/null)
         NEXTID=$(($NEXTID + 1))
       done
-      FN=`echo "$FILE" | sed 's/.*\///'`
+      FN=$(echo "$FILE" | sed 's/.*\///')
       cp -v "$FILE" "$OUTDIR/id:$(printf %06d $ID),time:0,execs:0,orig:$FN"
     done
   }

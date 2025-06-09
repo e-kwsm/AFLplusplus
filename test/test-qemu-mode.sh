@@ -33,7 +33,7 @@ test -e ../afl-qemu-trace && {
       } >>errors 2>&1
       test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
         $ECHO "$GREEN[+] afl-fuzz is working correctly with qemu_mode"
-        RUNTIME=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+        RUNTIME=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
       } || {
         echo CUT------------------------------------------------------------------CUT
         cat errors
@@ -46,7 +46,7 @@ test -e ../afl-qemu-trace && {
       $ECHO "$GREY[*] running afl-fuzz for qemu_mode AFL_ENTRYPOINT, this will take approx 6 seconds"
       {
         {
-          export AFL_ENTRYPOINT=`printf 1 | AFL_DEBUG=1 ../afl-qemu-trace ./test-instr 2>&1 >/dev/null | awk '/forkserver/{print $4; exit}'`
+          export AFL_ENTRYPOINT=$(printf 1 | AFL_DEBUG=1 ../afl-qemu-trace ./test-instr 2>&1 >/dev/null | awk '/forkserver/{print $4; exit}')
           $ECHO AFL_ENTRYPOINT=$AFL_ENTRYPOINT - $(nm test-instr | grep "T main") - $(file ./test-instr)
           ../afl-fuzz -m ${MEM_LIMIT} -V2 -Q -i in -o out -- ./test-instr
           unset AFL_ENTRYPOINT
@@ -54,7 +54,7 @@ test -e ../afl-qemu-trace && {
       } >>errors 2>&1
       test -n "$( ls out/default/queue/id:000001* 2>/dev/null )" && {
         $ECHO "$GREEN[+] afl-fuzz is working correctly with qemu_mode AFL_ENTRYPOINT"
-        RUNTIME=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+        RUNTIME=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
       } || {
         echo CUT------------------------------------------------------------------CUT
         cat errors
@@ -119,7 +119,7 @@ test -e ../afl-qemu-trace && {
           test -z "$IS_STATIC" && {
             if file test-instr | grep -q "32-bit"; then
               # for 32-bit reduce 8 nibbles to the lower 7 nibbles
-  	      ADDR_LOWER_PART=`nm test-instr | grep "T main" | awk '{print $1}' | sed 's/^.//'`
+  	      ADDR_LOWER_PART=$(nm test-instr | grep "T main" | awk '{print $1}' | sed 's/^.//')
               export AFL_QEMU_PERSISTENT_ADDR=`expr 0x4${ADDR_LOWER_PART}`
             elif [ "$SYS" = "aarch64" ]; then
               # for aarch64 reduce 16 nibbles to the lower 8 nibbles
@@ -127,12 +127,12 @@ test -e ../afl-qemu-trace && {
               export AFL_QEMU_PERSISTENT_ADDR=`expr 0x55${ADDR_LOWER_PART}`
             else
               # for x64 reduce 16 nibbles to the lower 9 nibbles
-  	      ADDR_LOWER_PART=`nm test-instr | grep "T main" | awk '{print $1}' | sed 's/^.......//'`
+  	      ADDR_LOWER_PART=$(nm test-instr | grep "T main" | awk '{print $1}' | sed 's/^.......//')
               export AFL_QEMU_PERSISTENT_ADDR=`expr 0x4${ADDR_LOWER_PART}`
             fi
           }
           test -n "$IS_STATIC" && {
-            export AFL_QEMU_PERSISTENT_ADDR=0x`nm test-instr | grep "T main" |  awk '{print $1}'`
+            export AFL_QEMU_PERSISTENT_ADDR=0x$(nm test-instr | grep "T main" |  awk '{print $1}')
           }
           export AFL_QEMU_PERSISTENT_GPR=1
           $ECHO "Info: AFL_QEMU_PERSISTENT_ADDR=$AFL_QEMU_PERSISTENT_ADDR <= $(nm test-instr | grep "T main" | awk '{print $1}')"
@@ -143,9 +143,9 @@ test -e ../afl-qemu-trace && {
         } >>errors 2>&1
         test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
           $ECHO "$GREEN[+] afl-fuzz is working correctly with persistent qemu_mode"
-          RUNTIMEP=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+          RUNTIMEP=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
           test -n "$RUNTIME" -a -n "$RUNTIMEP" && {
-            DIFF=`expr $RUNTIMEP / $RUNTIME`
+            DIFF=$(expr $RUNTIMEP / $RUNTIME)
             test "$DIFF" -gt 1 && { # must be at least twice as fast
               $ECHO "$GREEN[+] persistent qemu_mode was noticeable faster than standard qemu_mode"
             } || {
@@ -174,7 +174,7 @@ test -e ../afl-qemu-trace && {
           test -z "$IS_STATIC" && {
             if file test-instr-exit-at-end | grep -q "32-bit"; then
               # for 32-bit reduce 8 nibbles to the lower 7 nibbles
-  	      ADDR_LOWER_PART=`nm test-instr-exit-at-end | grep "T main" | awk '{print $1}' | sed 's/^.//'`
+  	      ADDR_LOWER_PART=$(nm test-instr-exit-at-end | grep "T main" | awk '{print $1}' | sed 's/^.//')
               export AFL_QEMU_PERSISTENT_ADDR=`expr 0x4${ADDR_LOWER_PART}`
             elif [ "$SYS" = "aarch64" ]; then
               # for aarch64 reduce 16 nibbles to the lower 8 nibbles
@@ -182,12 +182,12 @@ test -e ../afl-qemu-trace && {
               export AFL_QEMU_PERSISTENT_ADDR=`expr 0x55${ADDR_LOWER_PART}`
             else
               # for x64 reduce 16 nibbles to the lower 9 nibbles
-  	      ADDR_LOWER_PART=`nm test-instr-exit-at-end | grep "T main" | awk '{print $1}' | sed 's/^.......//'`
+  	      ADDR_LOWER_PART=$(nm test-instr-exit-at-end | grep "T main" | awk '{print $1}' | sed 's/^.......//')
               export AFL_QEMU_PERSISTENT_ADDR=`expr 0x4${ADDR_LOWER_PART}`
             fi
           }
           test -n "$IS_STATIC" && {
-            export AFL_QEMU_PERSISTENT_ADDR=0x`nm test-instr-exit-at-end | grep "T main" |  awk '{print $1}'`
+            export AFL_QEMU_PERSISTENT_ADDR=0x$(nm test-instr-exit-at-end | grep "T main" |  awk '{print $1}')
           }
           export AFL_QEMU_PERSISTENT_GPR=1
           $ECHO "Info: AFL_QEMU_PERSISTENT_ADDR=$AFL_QEMU_PERSISTENT_ADDR <= $(nm test-instr-exit-at-end | grep "T main" | awk '{print $1}')"
@@ -200,9 +200,9 @@ test -e ../afl-qemu-trace && {
         } >>errors 2>&1
         test -n "$( ls out/default/queue/id:000000* 2>/dev/null )" && {
           $ECHO "$GREEN[+] afl-fuzz is working correctly with persistent qemu_mode and AFL_QEMU_PERSISTENT_EXITS"
-          RUNTIMEP_EXIT=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+          RUNTIMEP_EXIT=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
           test -n "$RUNTIME" -a -n "$RUNTIMEP_EXIT" && {
-            DIFF=`expr $RUNTIMEP_EXIT / $RUNTIME`
+            DIFF=$(expr $RUNTIMEP_EXIT / $RUNTIME)
             test "$DIFF" -gt 1 && { # must be at least twice as fast
               $ECHO "$GREEN[+] persistent qemu_mode with AFL_QEMU_PERSISTENT_EXITS was noticeable faster than standard qemu_mode"
             } || {

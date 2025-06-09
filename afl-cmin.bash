@@ -232,7 +232,7 @@ fi
 if [ "$NYX_MODE" = "" ]; then
   if [ ! -f "$TARGET_BIN" -o ! -x "$TARGET_BIN" ]; then
 
-    TNEW="`which "$TARGET_BIN" 2>/dev/null`"
+    TNEW="$(which "$TARGET_BIN" 2>/dev/null)"
 
     if [ ! -f "$TNEW" -o ! -x "$TNEW" ]; then
       echo "[-] Error: binary '$TARGET_BIN' not found or not executable." 1>&2
@@ -247,7 +247,7 @@ fi
 
 grep -aq AFL_DUMP_MAP_SIZE "$TARGET_BIN" && {
   echo "[!] Trying to obtain the map size of the target ..."
-  MAPSIZE=`AFL_DUMP_MAP_SIZE=1 "./$TARGET_BIN" 2>/dev/null`
+  MAPSIZE=$(AFL_DUMP_MAP_SIZE=1 "./$TARGET_BIN" 2>/dev/null)
   test -n "$MAPSIZE" && {
     export AFL_MAP_SIZE=$MAPSIZE
     echo "[+] Setting AFL_MAP_SIZE=$MAPSIZE"
@@ -288,7 +288,7 @@ if [ ! "$STDIN_FILE" = "" ]; then
   touch "$STDIN_FILE" || exit 1
 fi
 
-SHOWMAP=`command -v afl-showmap 2>/dev/null`
+SHOWMAP=$(command -v afl-showmap 2>/dev/null)
 
 if [ -z "$SHOWMAP" ]; then
   TMP="${0%/afl-cmin.bash}/afl-showmap"
@@ -328,7 +328,7 @@ else
   fi
 fi
 
-IN_COUNT=$((`ls -- "$IN_DIR" 2>/dev/null | wc -l`))
+IN_COUNT=$(($(ls -- "$IN_DIR" 2>/dev/null | wc -l)))
 
 if [ "$IN_COUNT" = "0" ]; then
   echo "[-] Hmm, no inputs in the target directory. Nothing to be done."
@@ -346,7 +346,7 @@ if [ -n "$THREADS" ]; then
   fi
 fi
 
-FIRST_FILE=`ls "$IN_DIR" | head -1`
+FIRST_FILE=$(ls "$IN_DIR" | head -1)
 
 # Make sure that we're not dealing with a directory.
 
@@ -380,7 +380,7 @@ else
 
 fi
 
-FIRST_COUNT=$((`grep -c . "$TRACE_DIR/.run_test"`))
+FIRST_COUNT=$(($(grep -c . "$TRACE_DIR/.run_test")))
 
 if [ "$FIRST_COUNT" -gt "0" ]; then
 
@@ -520,7 +520,7 @@ echo "[*] Sorting trace sets (this may take a while)..."
 ls "$IN_DIR" | sed "s#^#$TRACE_DIR/#" | tr '\n' '\0' | xargs -0 -n 1 cat | \
   sort | uniq -c | sort -k 1,1 -n >"$TRACE_DIR/.all_uniq"
 
-TUPLE_COUNT=$((`grep -c . "$TRACE_DIR/.all_uniq"`))
+TUPLE_COUNT=$(($(grep -c . "$TRACE_DIR/.all_uniq")))
 
 echo "[+] Found $TUPLE_COUNT unique tuples across $IN_COUNT files."
 
@@ -616,7 +616,7 @@ done <"$TRACE_DIR/.all_uniq"
 
 echo
 
-OUT_COUNT=`ls -- "$OUT_DIR" | wc -l`
+OUT_COUNT=$(ls -- "$OUT_DIR" | wc -l)
 
 if [ "$OUT_COUNT" = "1" ]; then
   echo "[!] WARNING: All test cases had the same traces, check syntax!"

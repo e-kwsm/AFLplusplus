@@ -89,12 +89,12 @@ fi
 
 # Basic sanity checks
 
-if [ ! "`uname -s`" = "Linux" ]; then
+if [ ! "$(uname -s)" = "Linux" ]; then
  echo "[-] Error: this tool does not support non-Linux systems." 1>&2
  exit 1
 fi
 
-if [ ! "`id -u`" = "0" ]; then
+if [ ! "$(id -u)" = "0" ]; then
  echo "[-] Error: you need to run this script as root (sorry!)." 1>&2
  exit 1
 fi
