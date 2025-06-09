@@ -3,7 +3,7 @@
 . ./test-pre.sh
 
 $ECHO "$BLUE[*] Testing: LTO llvm_mode"
-test -e ../afl-clang-lto -a -e ../SanitizerCoverageLTO.so && {
+test -e ../afl-clang-lto && test -e ../SanitizerCoverageLTO.so && {
   # on FreeBSD need to set AFL_CC
   test $(uname -s) = 'FreeBSD' && {
     if type clang >/dev/null; then
@@ -18,14 +18,14 @@ test -e ../afl-clang-lto -a -e ../SanitizerCoverageLTO.so && {
     $ECHO "$GREEN[+] llvm_mode LTO compilation succeeded"
     echo 0 | AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.plain.0 -r -- ./test-instr.plain > /dev/null 2>&1
     AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.plain.1 -r -- ./test-instr.plain < /dev/null > /dev/null 2>&1
-    test -e test-instr.plain.0 -a -e test-instr.plain.1 && {
+    test -e test-instr.plain.0 && test -e test-instr.plain.1 && {
       diff -q test-instr.plain.0 test-instr.plain.1 > /dev/null 2>&1 && {
         $ECHO "$RED[!] llvm_mode LTO instrumentation should be different on different input but is not"
         CODE=1
       } || {
         $ECHO "$GREEN[+] llvm_mode LTO instrumentation present and working correctly"
         TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}')
-        test "$TUPLES" -gt 2 -a "$TUPLES" -lt 7 && {
+        test "$TUPLES" -gt 2 && test "$TUPLES" -lt 7 && {
           $ECHO "$GREEN[+] llvm_mode LTO run reported $TUPLES instrumented locations which is fine"
         } || {
           $ECHO "$RED[!] llvm_mode LTO instrumentation produces weird numbers: $TUPLES"

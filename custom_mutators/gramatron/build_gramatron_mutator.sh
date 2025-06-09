@@ -117,7 +117,7 @@ else
   echo "[*] cloning json-c"
   test -d json-c/.git || {
     CNT=1
-    while [ '!' -d json-c/.git -a "$CNT" -lt 4 ]; do
+    while [ '!' -d json-c/.git ] && [ "$CNT" -lt 4 ]; do
       echo "Trying to clone json-c (attempt $CNT/3)"
       git clone "$JSONC_REPO" 
       CNT=$(expr "$CNT" + 1)

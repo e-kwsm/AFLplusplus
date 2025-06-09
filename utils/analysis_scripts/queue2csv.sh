@@ -1,6 +1,6 @@
 #!/bin/bash
 
-test -z "$1" -o -z "$2" -o "$1" = "-h" -o "$1" = "-hh" -o "$1" = "--help" -o '!' -d "$1" && {
+test -z "$1" || test -z "$2" || test "$1" = "-h" || test "$1" = "-hh" || test "$1" = "--help" || ! test -d "$1" && {
   echo "Syntax: [-n]  $0 out-directory file.csv [\"tools/target --opt @@\"]"
   echo Option -n will suppress the CSV header.
   echo If the target execution command is supplied then also edge coverage is gathered.
@@ -80,7 +80,7 @@ mkdir "$DIR" || exit 1
       COV=""
     fi
 
-    if [ -n "$3" -a -s "$DIR/../edges.txt" ]; then
+    if [ -n "$3" ] && [ -s "$DIR/../edges.txt" ]; then
       echo "$TIME;\"$file\";$ID;$SRC;$COV;$EDGES;$EDGES_TOTAL;\"$OP\";$POS;$REP;UNIQUE$file"
     else
       echo "$TIME;\"$file\";$ID;$SRC;$COV;;;\"$OP\";$POS;$REP;"
@@ -90,7 +90,7 @@ mkdir "$DIR" || exit 1
 
 } | tee "$DIR/../queue.csv" > "$2" || exit 1
 
-if [ -n "$3" -a -s "$DIR/../edges.txt" ]; then
+if [ -n "$3" ] && [ -s "$DIR/../edges.txt" ]; then
 
   cat "$DIR/"* | sed 's/:.*//' | sort -n | uniq -c | grep -E '^[ \t]*1 ' | awk '{print$2}' > $DIR/../unique.txt
 

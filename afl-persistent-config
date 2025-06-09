@@ -2,7 +2,7 @@
 # written by jhertz
 # 
 
-test "$1" = "-h" -o "$1" = "-hh" -o "$1" = "--help" && {
+test "$1" = "-h" || test "$1" = "-hh" || test "$1" = "--help" && {
   echo 'afl-persistent-config'
   echo
   echo $0
@@ -111,7 +111,7 @@ if [[ "$PLATFORM" = "Linux" ]] ; then
   echo "Checks passed."
 
   test -d /etc/sysctl.d || echo Error: /etc/sysctl.d directory not found, cannot install shmem config
-  test -d /etc/sysctl.d -a '!' -e /etc/sysctl.d/99-fuzzing.conf && {
+  test -d /etc/sysctl.d && ! test -e /etc/sysctl.d/99-fuzzing.conf && {
     echo "Installing /etc/sysctl.d/99-fuzzing.conf"
     cat << EOF > /etc/sysctl.d/99-fuzzing.conf
 kernel.core_uses_pid=0

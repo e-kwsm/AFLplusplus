@@ -111,7 +111,7 @@ else
   echo "[*] cloning grammar mutator"
   test -d grammar_mutator/.git || {
     CNT=1
-    while [ '!' -d grammar_mutator/.git -a "$CNT" -lt 4 ]; do
+    while [ '!' -d grammar_mutator/.git ] && [ "$CNT" -lt 4 ]; do
       echo "Trying to clone grammar_mutator (attempt $CNT/3)"
       git clone "$GRAMMAR_REPO" 
       CNT=$(expr "$CNT" + 1)

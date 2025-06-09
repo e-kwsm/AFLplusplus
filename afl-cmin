@@ -153,7 +153,7 @@ function usage() {
 }
 
 function exists_and_is_executable(binarypath) {
-  return 0 == system("test -f "binarypath" -a -x "binarypath)
+  return 0 == system("test -f "binarypath" && test -x "binarypath)
 }
 
 BEGIN {
@@ -377,7 +377,7 @@ BEGIN {
   cmd = "ls "out_dir"/* 2>/dev/null | wc -l"
   cmd | getline noofentries
   close(cmd)
-  if (0 == system( "test -d "out_dir" -a "noofentries" -gt 0" )) {
+  if (0 == system( "test -d "out_dir" && test "noofentries" -gt 0" )) {
     print "[-] Error: directory '"out_dir"' exists and is not empty - delete it first." > "/dev/stderr"
     exit 1
   }

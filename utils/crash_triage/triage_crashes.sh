@@ -47,7 +47,7 @@ if [ "$AFL_ALLOW_TMP" = "" ]; then
   echo "$BIN" | grep -qE '^(/var)?/tmp/'
   T2="$?"
 
-  if [ "$T1" = "0" -o "$T2" = "0" ]; then
+  if [ "$T1" = "0" ] || [ "$T2" = "0" ]; then
     echo "[-] Error: do not use shared /tmp or /var/tmp directories with this script." 1>&2
     exit 1
   fi
@@ -59,7 +59,7 @@ if
   GDB=gdb
 fi
 
-if [ ! -f "$BIN" -o ! -x "$BIN" ]; then
+if [ ! -f "$BIN" ] || [ ! -x "$BIN" ]; then
   echo "[-] Error: binary '$BIN' not found or is not executable." 1>&2
   exit 1
 fi

@@ -69,7 +69,7 @@ $ECHO "${RESET}${GREY}[*] starting AFL++ performance test framework ..."
 
 $ECHO "$BLUE[*] Testing: llvm_mode"
 LLVM=x
-test -e ../afl-clang-fast -a -e ../afl-fuzz && {
+test -e ../afl-clang-fast && test -e ../afl-fuzz && {
   ../afl-clang-fast -o test-instr.llvm ../test-instr.c > /dev/null 2>&1
   test -e test-instr.llvm && {
     $ECHO "$GREEN[+] llvm_mode compilation succeeded"
@@ -93,7 +93,7 @@ test -e ../afl-clang-fast -a -e ../afl-fuzz && {
 
 $ECHO "$BLUE[*] Testing: gcc_plugin"
 GCCP=x
-test -e ../afl-gcc-fast -a -e ../afl-fuzz && {
+test -e ../afl-gcc-fast && test -e ../afl-fuzz && {
   ../afl-gcc-fast -o test-instr.gccp ../test-instr.c > /dev/null 2>&1
   test -e test-instr.gccp && {
     $ECHO "$GREEN[+] gcc_plugin compilation succeeded"
@@ -117,7 +117,7 @@ test -e ../afl-gcc-fast -a -e ../afl-fuzz && {
 
 $ECHO "$BLUE[*] Testing: qemu_mode"
 QEMU=x
-test -e ../afl-qemu-trace -a -e ../afl-fuzz && {
+test -e ../afl-qemu-trace && test -e ../afl-fuzz && {
   $CC -o test-instr.qemu ../test-instr.c > /dev/null 2>&1
   test -e test-instr.qemu && {
     $ECHO "$GREEN[+] native compilation with cc succeeded"
@@ -167,29 +167,29 @@ test -s $FILE && {
     test -n "$L" && LAST_LLVM=$L
     test -n "$P" && LAST_GCCP=$P
     test -n "$Q" && LAST_QEMU=$Q
-    test -n "$G" -a -z "$LOW_GCC" && LOW_GCC=$G || {
-      test -n "$G" -a "$G" -lt "$LOW_GCC" 2> /dev/null && LOW_GCC=$G
+    test -n "$G" && test -z "$LOW_GCC" && LOW_GCC=$G || {
+      test -n "$G" && test "$G" -lt "$LOW_GCC" 2> /dev/null && LOW_GCC=$G
     }
-    test -n "$L" -a -z "$LOW_LLVM" && LOW_LLVM=$L || {
-      test -n "$L" -a "$L" -lt "$LOW_LLVM" 2> /dev/null && LOW_LLVM=$L
+    test -n "$L" && test -z "$LOW_LLVM" && LOW_LLVM=$L || {
+      test -n "$L" && test "$L" -lt "$LOW_LLVM" 2> /dev/null && LOW_LLVM=$L
     }
-    test -n "$P" -a -z "$LOW_GCCP" && LOW_GCCP=$P || {
-      test -n "$P" -a "$P" -lt "$LOW_GCCP" 2> /dev/null && LOW_GCCP=$P
+    test -n "$P" && test -z "$LOW_GCCP" && LOW_GCCP=$P || {
+      test -n "$P" && test "$P" -lt "$LOW_GCCP" 2> /dev/null && LOW_GCCP=$P
     }
-    test -n "$Q" -a -z "$LOW_QEMU" && LOW_QEMU=$Q || {
-      test -n "$Q" -a "$Q" -lt "$LOW_QEMU" 2> /dev/null && LOW_QEMU=$Q
+    test -n "$Q" && test -z "$LOW_QEMU" && LOW_QEMU=$Q || {
+      test -n "$Q" && test "$Q" -lt "$LOW_QEMU" 2> /dev/null && LOW_QEMU=$Q
     }   
-    test -n "$G" -a -z "$HIGH_GCC" && HIGH_GCC=$G || {
-      test -n "$G" -a "$G" -gt "$HIGH_GCC" 2> /dev/null && HIGH_GCC=$G
+    test -n "$G" && test -z "$HIGH_GCC" && HIGH_GCC=$G || {
+      test -n "$G" && test "$G" -gt "$HIGH_GCC" 2> /dev/null && HIGH_GCC=$G
     }
-    test -n "$L" -a -z "$HIGH_LLVM" && HIGH_LLVM=$L || {
-      test -n "$L" -a "$L" -gt "$HIGH_LLVM" 2> /dev/null && HIGH_LLVM=$L
+    test -n "$L" && test -z "$HIGH_LLVM" && HIGH_LLVM=$L || {
+      test -n "$L" && test "$L" -gt "$HIGH_LLVM" 2> /dev/null && HIGH_LLVM=$L
     }
-    test -n "$P" -a -z "$HIGH_GCCP" && HIGH_GCCP=$P || {
-      test -n "$P" -a "$P" -gt "$HIGH_GCCP" 2> /dev/null && HIGH_GCCP=$P
+    test -n "$P" && test -z "$HIGH_GCCP" && HIGH_GCCP=$P || {
+      test -n "$P" && test "$P" -gt "$HIGH_GCCP" 2> /dev/null && HIGH_GCCP=$P
     }
-    test -n "$Q" -a -z "$HIGH_QEMU" && HIGH_QEMU=$Q || {
-      test -n "$Q" -a "$Q" -gt "$HIGH_QEMU" 2> /dev/null && HIGH_QEMU=$Q
+    test -n "$Q" && test -z "$HIGH_QEMU" && HIGH_QEMU=$Q || {
+      test -n "$Q" && test "$Q" -gt "$HIGH_QEMU" 2> /dev/null && HIGH_QEMU=$Q
     }
   done < $FILE
   $ECHO "$YELLOW[!] Reading saved data from $FILE completed, please compare the results:"

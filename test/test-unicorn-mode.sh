@@ -5,9 +5,9 @@
 test -f ../unicorn_mode/.venv/bin/activate && { $ECHO "$GREY[*] Loading python venv for Unicorn"; . ../unicorn_mode/.venv/bin/activate ; }
 
 $ECHO "$BLUE[*] Testing: unicorn_mode"
-DIR=`ls -d ../unicorn_mode/.venv/lib/python*/site-packages/unicorn 2>/dev/null | tail -n 1`
+DIR=$(ls -d ../unicorn_mode/.venv/lib/python*/site-packages/unicorn 2>/dev/null | tail -n 1)
 test -d "$DIR" && {
-  test -e ../unicorn_mode/samples/python_simple/simple_target.bin -a -e ../unicorn_mode/samples/compcov_x64/compcov_target.bin && {
+  test -e ../unicorn_mode/samples/python_simple/simple_target.bin && test -e ../unicorn_mode/samples/compcov_x64/compcov_target.bin && {
     {
       # We want to see python errors etc. in logs, in case something doesn't work
       export AFL_DEBUG_CHILD=1
@@ -53,7 +53,7 @@ test -d "$DIR" && {
       cd ../../../test
 
       # travis workaround
-      test "$PY" = "/opt/pyenv/shims/python" -a -x /usr/bin/python && PY=/usr/bin/python
+      test "$PY" = "/opt/pyenv/shims/python" && test -x /usr/bin/python && PY=/usr/bin/python
       mkdir -p in
       echo 0 > in/in
       $ECHO "$GREY[*] Using python binary $PY"

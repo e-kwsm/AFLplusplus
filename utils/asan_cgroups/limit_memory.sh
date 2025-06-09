@@ -62,7 +62,7 @@ shift $((OPTIND-1))
 
 TARGET_BIN="$1"
 
-if [ "$TARGET_BIN" = "" -o "$NEW_USER" = "" ]; then
+if [ "$TARGET_BIN" = "" ] || [ "$NEW_USER" = "" ]; then
 
   cat 1>&2 <<_EOF_
 Usage: $0 [ options ] -- /path/to/afl-fuzz [ ...afl options... ]

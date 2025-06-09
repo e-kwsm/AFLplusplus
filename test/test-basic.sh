@@ -6,14 +6,14 @@ OS=$(uname -s)
 
 AFL_COMPILER=afl-clang-fast
 $ECHO "$BLUE[*] Testing: ${AFL_COMPILER}, afl-showmap, afl-fuzz, afl-cmin and afl-tmin"
- test -e ../${AFL_COMPILER} -a -e ../afl-showmap -a -e ../afl-fuzz && {
+ test -e ../${AFL_COMPILER} && test -e ../afl-showmap && test -e ../afl-fuzz && {
    ../${AFL_COMPILER} -o test-instr.plain -O0 ../test-instr.c > /dev/null 2>&1
    AFL_HARDEN=1 ../${AFL_COMPILER} -o test-compcov.harden test-compcov.c > /dev/null 2>&1
    test -e test-instr.plain && {
     $ECHO "$GREEN[+] ${AFL_COMPILER} compilation succeeded"
     echo 0 | AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.plain.0 -r -- ./test-instr.plain > /dev/null 2>&1
     AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o test-instr.plain.1 -r -- ./test-instr.plain < /dev/null > /dev/null 2>&1
-    test -e test-instr.plain.0 -a -e test-instr.plain.1 && {
+    test -e test-instr.plain.0 && test -e test-instr.plain.1 && {
       diff test-instr.plain.0 test-instr.plain.1 > /dev/null 2>&1 && {
         $ECHO "$RED[!] ${AFL_COMPILER} instrumentation should be different on different input but is not"
         CODE=1

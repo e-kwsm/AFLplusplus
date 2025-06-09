@@ -2,7 +2,7 @@
 CMDLINE="/prg/tests/normal/tiff-4.0.4/tools/thumbnail @@ /dev/null"
 INDIR="/prg/tests/normal/tiff-4.0.4/in-small"
 
-test -z "$1" -o -n "$4" && { 
+test -z "$1" || test -n "$4" && {
   echo "Syntax: $0 commit-id <indir> \"<cmdline>\""
   echo
   echo "Switches to the defined commit ID, compiles with profiling and runs"

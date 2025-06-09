@@ -2,7 +2,7 @@
 
 . ./test-pre.sh
 
-test -e ../afl-clang-fast -a -e ../split-switches-pass.so && {
+test -e ../afl-clang-fast && test -e ../split-switches-pass.so && {
   $ECHO "$GREY[*] llvm_mode laf-intel/compcov testing splitting floating point types with Nan, infinity, minusZero"
   for testcase in ./test-fp_minusZerocases.c ./test-fp_Infcases.c ./test-fp_NaNcases.c; do
   #for testcase in ./test-fp_cases.c ./test-fp_Infcases.c ./test-fp_NaNcases.c ./test-fp_minusZerocases.c ; do

@@ -79,7 +79,7 @@ else
   echo "[*] cloning qemuafl"
   test -d qemuafl/.git || {
     CNT=1
-    while [ '!' -d qemuafl/.git -a "$CNT" -lt 4 ]; do
+    while [ '!' -d qemuafl/.git ] && [ "$CNT" -lt 4 ]; do
       echo "Trying to clone qemuafl (attempt $CNT/3)"
       git clone --depth 1 https://github.com/AFLplusplus/qemuafl
       CNT=$(expr "$CNT" + 1)
