@@ -40,7 +40,7 @@ echo Adding seeds ...
 NEXTID=0
 for i in $*; do
   test -z "$i" -o "$i" = "$OUT" -o "$i" = "-i" -o "$i" = "-o" || {
-    find "$i" -type f | while read FILE; do
+    find "$i" -type f | while read -r FILE; do
       N=xxx
       while [ -n "$N" ]; do
         ID=$NEXTID

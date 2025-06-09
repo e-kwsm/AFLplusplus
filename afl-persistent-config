@@ -30,7 +30,7 @@ echo "         strong firewall rules and only make SSH available as a network"
 echo "         service!"
 echo
 echo -n "Type \"YES\" to continue: "
-read ANSWER
+read -r ANSWER
 if [[ "$ANSWER" != "YES" ]]; then
   echo Input was not YES, aborting ...
   exit 1
