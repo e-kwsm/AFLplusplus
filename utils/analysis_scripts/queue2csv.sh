@@ -45,7 +45,7 @@ mkdir "$DIR" || exit 1
     echo "time;\"filename\";id;src;new_cov;edges;total_edges;\"op\";pos;rep;unique_edges"
   fi
 
-  $LISTCMD | grep -v ,sync: | sed 's/.*id:/id:/g' | while read file; do
+  $LISTCMD | grep -v ,sync: | sed 's/.*id:/id:/g' | while read -r file; do
 
     if [ -n "$3" ]; then
 
@@ -96,7 +96,7 @@ if [ -n "$3" -a -s "$DIR/../edges.txt" ]; then
 
   if [ -s "$DIR/../unique.txt" ]; then
 
-    ls "$DIR/id:"* | grep -v ",sync:" |sed 's/.*\/id:/id:/g' | while read file; do
+    ls "$DIR/id:"* | grep -v ",sync:" |sed 's/.*\/id:/id:/g' | while read -r file; do
 
       CNT=$(sed 's/:.*//' "$DIR/$file" | tee "$DIR/../tmp.txt" | wc -l)
       DIFF=$(diff -u "$DIR/../tmp.txt" "$DIR/../unique.txt" | grep -E -c '^-[0-9]')

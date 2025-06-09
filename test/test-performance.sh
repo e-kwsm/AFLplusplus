@@ -9,7 +9,7 @@ test -z "$FILE" && FILE=.afl_performance
 test -e $FILE || {
   echo Warning: This script measure the performance of AFL++ and saves the result for future comparisons into $FILE
   echo Press ENTER to continue or CONTROL-C to abort
-  read IN
+  read -r IN
 }
 
 test -e ./test-performance.sh || { echo Error: this script must be run from the directory in which it lies. ; exit 1 ; }
@@ -154,7 +154,7 @@ HIGH_QEMU=
 LAST_QEMU=
 
 test -s $FILE && {
-  while read LINE; do
+  while read -r LINE; do
     G=$(echo $LINE | awk '{print$1}')
     L=$(echo $LINE | awk '{print$2}')
     P=$(echo $LINE | awk '{print$3}')
