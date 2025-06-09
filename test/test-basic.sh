@@ -26,8 +26,8 @@ $ECHO "$BLUE[*] Testing: ${AFL_COMPILER}, afl-showmap, afl-fuzz, afl-cmin and af
     }
     rm -f test-instr.plain.0 test-instr.plain.1
     SKIP=
-    TUPLES=`echo 1|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}'`
-    test "$TUPLES" -gt 1 -a "$TUPLES" -lt 22 && {
+    TUPLES=$(echo 1|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}')
+    test "$TUPLES" -gt 1 && test "$TUPLES" -lt 22 && {
       $ECHO "$GREEN[+] ${AFL_COMPILER} run reported $TUPLES instrumented locations which is fine"
     } || {
       $ECHO "$RED[!] ${AFL_COMPILER} instrumentation produces weird numbers: $TUPLES"
@@ -88,7 +88,7 @@ $ECHO "$BLUE[*] Testing: ${AFL_COMPILER}, afl-showmap, afl-fuzz, afl-cmin and af
     } || {
       mkdir -p in2
       ../afl-cmin -m ${MEM_LIMIT} -i in -o in2 -- ./test-instr.plain >/dev/null 2>&1 # why is afl-forkserver writing to stderr?
-      CNT=`ls in2/* 2>/dev/null | wc -l`
+      CNT=$(ls in2/* 2>/dev/null | wc -l)
       case "$CNT" in
         *2) $ECHO "$GREEN[+] afl-cmin correctly minimized the number of testcases" ;;
         *)  $ECHO "$RED[!] afl-cmin did not correctly minimize the number of testcases ($CNT)"
@@ -100,7 +100,7 @@ $ECHO "$BLUE[*] Testing: ${AFL_COMPILER}, afl-showmap, afl-fuzz, afl-cmin and af
     export AFL_QUIET=1
     if command -v bash >/dev/null ; then {
       ../afl-cmin.bash -m ${MEM_LIMIT} -i in -o in2 -- ./test-instr.plain >/dev/null
-      CNT=`ls in2/* 2>/dev/null | wc -l`
+      CNT=$(ls in2/* 2>/dev/null | wc -l)
       case "$CNT" in
         *2) $ECHO "$GREEN[+] afl-cmin.bash correctly minimized the number of testcases" ;;
         *)  $ECHO "$RED[!] afl-cmin.bash did not correctly minimize the number of testcases ($CNT)"
@@ -112,7 +112,7 @@ $ECHO "$BLUE[*] Testing: ${AFL_COMPILER}, afl-showmap, afl-fuzz, afl-cmin and af
     }
     fi
     ../afl-tmin -m ${MEM_LIMIT} -i in/in2 -o in2/in2 -- ./test-instr.plain > /dev/null 2>&1
-    SIZE=`ls -l in2/in2 2>/dev/null | awk '{print$5}'`
+    SIZE=$(ls -l in2/in2 2>/dev/null | awk '{print$5}')
     test "$SIZE" = 1 && $ECHO "$GREEN[+] afl-tmin correctly minimized the testcase"
     test "$SIZE" = 1 || {
        $ECHO "$RED[!] afl-tmin did incorrectly minimize the testcase to $SIZE"

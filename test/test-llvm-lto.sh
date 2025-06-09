@@ -5,11 +5,11 @@
 $ECHO "$BLUE[*] Testing: LTO llvm_mode"
 test -e ../afl-clang-lto -a -e ../SanitizerCoverageLTO.so && {
   # on FreeBSD need to set AFL_CC
-  test `uname -s` = 'FreeBSD' && {
+  test $(uname -s) = 'FreeBSD' && {
     if type clang >/dev/null; then
-      export AFL_CC=`command -v clang`
+      export AFL_CC=$(command -v clang)
     else
-      export AFL_CC=`$LLVM_CONFIG --bindir`/clang
+      export AFL_CC=$($LLVM_CONFIG --bindir)/clang
     fi
   }
 
@@ -24,7 +24,7 @@ test -e ../afl-clang-lto -a -e ../SanitizerCoverageLTO.so && {
         CODE=1
       } || {
         $ECHO "$GREEN[+] llvm_mode LTO instrumentation present and working correctly"
-        TUPLES=`echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}'`
+        TUPLES=$(echo 0|AFL_QUIET=1 ../afl-showmap -m ${MEM_LIMIT} -o /dev/null -- ./test-instr.plain 2>&1 | grep Captur | awk '{print$3}')
         test "$TUPLES" -gt 2 -a "$TUPLES" -lt 7 && {
           $ECHO "$GREEN[+] llvm_mode LTO run reported $TUPLES instrumented locations which is fine"
         } || {

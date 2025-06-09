@@ -15,7 +15,7 @@ test -e $FILE || {
 test -e ./test-performance.sh || { echo Error: this script must be run from the directory in which it lies. ; exit 1 ; }
 
 export AFL_QUIET=1
-export AFL_PATH=`pwd`/..
+export AFL_PATH=$(pwd)/..
 
 unset AFL_EXIT_WHEN_DONE
 unset AFL_EXIT_ON_TIME
@@ -80,7 +80,7 @@ test -e ../afl-clang-fast -a -e ../afl-fuzz && {
       ../afl-fuzz -V 30 -s 123 -m ${MEM_LIMIT} -i in -o out-llvm -- ./test-instr.llvm
     } >>errors 2>&1
     test -n "$( ls out-llvm/default/queue/id:000002* 2> /dev/null )" && {
-      LLVM=`grep execs_done out-llvm/default/fuzzer_stats | awk '{print$3}'`
+      LLVM=$(grep execs_done out-llvm/default/fuzzer_stats | awk '{print$3}')
     } || {
         echo CUT----------------------------------------------------------------
         cat errors
@@ -104,7 +104,7 @@ test -e ../afl-gcc-fast -a -e ../afl-fuzz && {
       ../afl-fuzz -V 30 -s 123 -m ${MEM_LIMIT} -i in -o out-gccp -- ./test-instr.gccp
     } >>errors 2>&1
     test -n "$( ls out-gccp/default/queue/id:000002* 2> /dev/null )" && {
-      GCCP=`grep execs_done out-gccp/default/fuzzer_stats | awk '{print$3}'`
+      GCCP=$(grep execs_done out-gccp/default/fuzzer_stats | awk '{print$3}')
     } || {
         echo CUT----------------------------------------------------------------
         cat errors
@@ -128,7 +128,7 @@ test -e ../afl-qemu-trace -a -e ../afl-fuzz && {
       ../afl-fuzz -Q -V 30 -s 123 -m ${MEM_LIMIT} -i in -o out-qemu -- ./test-instr.qemu
     } >>errors 2>&1
     test -n "$( ls out-qemu/default/queue/id:000002* 2> /dev/null )" && {
-      QEMU=`grep execs_done out-qemu/default/fuzzer_stats | awk '{print$3}'`
+      QEMU=$(grep execs_done out-qemu/default/fuzzer_stats | awk '{print$3}')
     } || {
         echo CUT----------------------------------------------------------------
         echo ../afl-fuzz -Q -V 30 -s 123 -m ${MEM_LIMIT} -i in -o out-qemu -- ./test-instr.qemu
@@ -155,10 +155,10 @@ LAST_QEMU=
 
 test -s $FILE && {
   while read LINE; do
-    G=`echo $LINE | awk '{print$1}'`
-    L=`echo $LINE | awk '{print$2}'`
-    P=`echo $LINE | awk '{print$3}'`
-    Q=`echo $LINE | awk '{print$4}'`
+    G=$(echo $LINE | awk '{print$1}')
+    L=$(echo $LINE | awk '{print$2}')
+    P=$(echo $LINE | awk '{print$3}')
+    Q=$(echo $LINE | awk '{print$4}')
     test "$G" = x && G=
     test "$L" = x && L=
     test "$P" = x && P=

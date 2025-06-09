@@ -25,7 +25,7 @@ test -n "$4" && { echo "Error: too many commandline options. Target command and 
 
 test -d "$1"/queue && OUT="$1/queue" || OUT="$1"
 
-OK=`ls $OUT/id:000000,time:0,orig:* 2> /dev/null`
+OK=$(ls $OUT/id:000000,time:0,orig:* 2> /dev/null)
 if [ -n "$OK" ]; then
   LISTCMD="ls $OUT/id:"*
 else

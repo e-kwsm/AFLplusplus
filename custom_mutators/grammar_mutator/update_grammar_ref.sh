@@ -9,7 +9,7 @@
 TOOL="grammar mutator"
 VERSION_FILE='./GRAMMAR_VERSION'
 REPO_FOLDER='./grammar_mutator'
-THIS_SCRIPT=`basename $0`
+THIS_SCRIPT=$(basename $0)
 BRANCH="stable"
 
 NEW_VERSION="$1"

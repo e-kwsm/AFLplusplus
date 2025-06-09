@@ -16,7 +16,7 @@
 #
 
 get_abs_path() {
-  echo $(cd "`dirname "$1"`" && pwd)/"`basename "$1"`"
+  echo $(cd "$(dirname "$1")" && pwd)/"$(basename "$1")"
 }
 
 echo "progress plotting utility for afl-fuzz by Michal Zalewski"
@@ -53,8 +53,8 @@ _EOF_
 
 fi
 
-inputdir=`get_abs_path "$1"`
-outputdir=`get_abs_path "$2"`
+inputdir=$(get_abs_path "$1")
+outputdir=$(get_abs_path "$2")
 
 #if [ "$AFL_ALLOW_TMP" = "" ]; then
 #
@@ -89,7 +89,7 @@ if [ ! -f "$inputdir/plot_data" ]; then
 
 fi
 
-LINES=`cat "$inputdir/plot_data" | wc -l`
+LINES=$(cat "$inputdir/plot_data" | wc -l)
 
 if [ "$LINES" -lt 3 ]; then
 
@@ -98,11 +98,11 @@ if [ "$LINES" -lt 3 ]; then
 
 fi
 
-BANNER="`cat "$inputdir/fuzzer_stats" 2> /dev/null | grep '^afl_banner ' | cut -d: -f2- | cut -b2-`"
+BANNER="$(cat "$inputdir/fuzzer_stats" 2> /dev/null | grep '^afl_banner ' | cut -d: -f2- | cut -b2-)"
 
 test "$BANNER" = "" && BANNER="(none)"
 
-GNUPLOT=`command -v gnuplot 2>/dev/null`
+GNUPLOT=$(command -v gnuplot 2>/dev/null)
 
 if [ "$GNUPLOT" = "" ]; then
 
@@ -315,7 +315,7 @@ cat >"$outputdir/index.html" <<_EOF_
 <table style="font-family: 'Trebuchet MS', 'Tahoma', 'Arial', 'Helvetica'">
 <tr><td style="width: 18ex"><b>Banner:</b></td><td>$BANNER</td></tr>
 <tr><td><b>Directory:</b></td><td>$inputdir</td></tr>
-<tr><td><b>Generated on:</b></td><td>`date`</td></tr>
+<tr><td><b>Generated on:</b></td><td>$(date)</td></tr>
 </table>
 <p>
 <img src="edges.png" width=1000 height=300>

@@ -44,7 +44,7 @@ test "$CI" = "true" && {
           } >>errors 2>&1
           test -n "$( ls out/default/queue/id:000002* 2>/dev/null )" && {
             $ECHO "$GREEN[+] afl-fuzz is working correctly with nyx_mode"
-            RUNTIME=`grep execs_done out/default/fuzzer_stats | awk '{print$3}'`
+            RUNTIME=$(grep execs_done out/default/fuzzer_stats | awk '{print$3}')
             rm -rf errors nyx-test test-instr in out
           } || {
             echo CUT------------------------------------------------------------------CUT

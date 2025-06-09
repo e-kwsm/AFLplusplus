@@ -13,7 +13,7 @@ test -d "$DIR" && {
       export AFL_DEBUG_CHILD=1
 
       # some python version should be available now
-      PYTHONS="`command -v ../unicorn_mode/.venv/bin/python3` `command -v python3` `command -v python`"
+      PYTHONS="$(command -v ../unicorn_mode/.venv/bin/python3) $(command -v python3) $(command -v python)"
       EASY_INSTALL_FOUND=0
       for PYTHON in $PYTHONS ; do
 

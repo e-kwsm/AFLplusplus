@@ -28,12 +28,12 @@ export LDFLAGS="$LDFLAGS -pg"
 make >/dev/null 2>&1 || echo ERROR: BUILD FAILURE 
 test -x ./afl-fuzz || { echo "BUILD FAIL $C" > $C.out ; make clean ; exit 1 ; }
 
-START=`date +%s`
+START=$(date +%s)
 echo $START > $C.out
 time nice -n -20 ./afl-fuzz -i "$INDIR" -s 123 -o out-profile -- $CMDLINE 2>> $C.out
-STOP=`date +%s`
+STOP=$(date +%s)
 echo $STOP >> $C.out
-echo RUNTIME: `expr $STOP - $START` >> $C.out
+echo RUNTIME: $(expr $STOP - $START) >> $C.out
 cat out-profile/default/fuzzer_stats >> $C.out
 gprof ./afl-fuzz gmon.out >> $C.out
 

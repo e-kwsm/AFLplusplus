@@ -2,7 +2,7 @@
 
 [ -z "${UNAME}" ] && UNAME=$(uname)
 
-DIR=`dirname $0`
+DIR=$(dirname $0)
 
 if [ "$UNAME" = Darwin ]; then
   export DYLD_LIBRARY_PATH=../../unicorn

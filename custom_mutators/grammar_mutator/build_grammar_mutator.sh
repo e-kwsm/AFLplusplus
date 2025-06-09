@@ -43,7 +43,7 @@ echo
 
 echo "[*] Performing basic sanity checks..."
 
-PLT=`uname -s`
+PLT=$(uname -s)
 
 if [ ! -f "../../config.h" ]; then
 
@@ -52,31 +52,31 @@ if [ ! -f "../../config.h" ]; then
 
 fi
 
-PYTHONBIN=`command -v python3 || command -v python || echo python3`
+PYTHONBIN=$(command -v python3 || command -v python || echo python3)
 MAKECMD=make
 TARCMD=tar
 
 if [ "$PLT" = "Darwin" ]; then
-  CORES=`sysctl -n hw.ncpu`
+  CORES=$(sysctl -n hw.ncpu)
   TARCMD=tar
 fi
 
 if [ "$PLT" = "FreeBSD" ]; then
   MAKECMD=gmake
-  CORES=`sysctl -n hw.ncpu`
+  CORES=$(sysctl -n hw.ncpu)
   TARCMD=gtar
 fi
 
 if [ "$PLT" = "NetBSD" ] || [ "$PLT" = "OpenBSD" ]; then
   MAKECMD=gmake
-  CORES=`sysctl -n hw.ncpu`
+  CORES=$(sysctl -n hw.ncpu)
   TARCMD=gtar
 fi
 
 PREREQ_NOTFOUND=
 for i in git $MAKECMD $TARCMD; do
 
-  T=`command -v "$i" 2>/dev/null`
+  T=$(command -v "$i" 2>/dev/null)
 
   if [ "$T" = "" ]; then
 
@@ -114,7 +114,7 @@ else
     while [ '!' -d grammar_mutator/.git -a "$CNT" -lt 4 ]; do
       echo "Trying to clone grammar_mutator (attempt $CNT/3)"
       git clone "$GRAMMAR_REPO" 
-      CNT=`expr "$CNT" + 1`
+      CNT=$(expr "$CNT" + 1)
     done
   }
 fi
