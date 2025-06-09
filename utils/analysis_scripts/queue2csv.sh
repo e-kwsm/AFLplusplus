@@ -99,7 +99,7 @@ if [ -n "$3" -a -s "$DIR/../edges.txt" ]; then
     ls "$DIR/id:"* | grep -v ",sync:" |sed 's/.*\/id:/id:/g' | while read file; do
 
       CNT=$(sed 's/:.*//' "$DIR/$file" | tee "$DIR/../tmp.txt" | wc -l)
-      DIFF=$(diff -u "$DIR/../tmp.txt" "$DIR/../unique.txt" | grep -E '^-[0-9]' | wc -l)
+      DIFF=$(diff -u "$DIR/../tmp.txt" "$DIR/../unique.txt" | grep -E -c '^-[0-9]')
       UNIQUE=$(($CNT - $DIFF))
       sed -i "s/;UNIQUE$file/;$UNIQUE/" "$DIR/../queue.csv" "$2"
 
